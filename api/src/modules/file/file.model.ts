@@ -13,6 +13,7 @@ export interface IFile extends Document {
   originalUrl: string;
   compressedUrl?: string;
   status: 'PENDING' | 'PROCESSING' | 'DONE';
+  progress: number;
 }
 
 /*
@@ -36,6 +37,10 @@ const fileSchema = new Schema<IFile>(
       enum: ['PENDING', 'PROCESSING', 'DONE'],
       default: 'PENDING',
     },
+    progress: {
+      type: Number,
+      default: 0
+    }
   },
   { timestamps: true },
 );

@@ -4,9 +4,11 @@ import {
   getAllFiles,
   getFileById,
   getFilePath,
+  getFileStatusService,
   handleFileUpload,
 } from './file.service';
 import path from 'path';
+import { tryCatch } from 'bullmq';
 
 /*
  ************ FILE UPLOAD CONTROLLER *****************
@@ -33,7 +35,7 @@ export const uploadFile = async (
 };
 
 /*
- ************ GET FILES *****************
+ ************ GET FILES CONTROLLER *****************
  */
 export const getFiles = async (
   req: Request,
@@ -53,7 +55,7 @@ export const getFiles = async (
 };
 
 /*
- ************ GET FILE *****************
+ ************ GET FILE CONTROLLER *****************
  */
 export const getFile = async (
   req: Request,
@@ -73,7 +75,7 @@ export const getFile = async (
 };
 
 /*
- ************ DOWNLOAD FILE *****************
+ ************ DOWNLOAD FILE CONTROLLER *****************
  */
 export const downloadFile = async (
   req: Request,
@@ -90,7 +92,7 @@ export const downloadFile = async (
 };
 
 /*
- ************ DELETE FILE *****************
+ ************ DELETE FILE CONTROLLER *****************
  */
 export const deleteFile = async (
   req: Request,
@@ -103,6 +105,26 @@ export const deleteFile = async (
     res.json({
       success: true,
       message: 'File deleted successfully',
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+/*
+ ************ FILE PROGRESS CONTROLLER *****************
+ */
+export const getFileStatusController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const data = await getFileStatusService(req.params.id as string);
+
+    res.json({
+      success: true,
+      data,
     });
   } catch (err) {
     next(err);

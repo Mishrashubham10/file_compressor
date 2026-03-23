@@ -1,4 +1,4 @@
-import { compressImg } from '../compression/compression.service';
+import { compressionQueue } from '../compression/compression.queue';
 import fileModel from './file.model';
 import fs from 'fs/promises';
 
@@ -15,32 +15,15 @@ export const handleFileUpload = async (file: Express.Multer.File) => {
     status: 'PROCESSING',
   });
 
-  try {
-    // 2. Only compress images (for now)
-    if (file.mimetype.startsWith('image')) {
-      const { outputPath, compressedSize } = await compressImg(file.path);
+  // ADD JOB TO THE QUEUE
+  await compressionQueue.add('compress-file', {
+    fileId: newFile._id,
+    filePath: file.path,
+    mimeType: file.mimetype,
+    originalSize: file.size,
+  });
 
-      // 3. Calculate compression ratio
-      const compressionRatio = ((file.size - compressedSize) / file.size) * 100;
-
-      // 4. Update DB
-      newFile.compressedSize = compressedSize;
-      newFile.compressedUrl = outputPath;
-      newFile.compressedRatio = Number(compressionRatio.toFixed(2));
-      newFile.status = 'DONE';
-
-      await newFile.save();
-    } else {
-      newFile.status = 'DONE'; // skip for now
-      await newFile.save();
-    }
-
-    return newFile;
-  } catch (err) {
-    newFile.status = 'PENDING';
-    await newFile.save();
-    throw err;
-  }
+  return newFile;
 };
 
 /*
@@ -105,4 +88,19 @@ export const deleteFileById = async (id: string) => {
   await file.deleteOne();
 
   return true;
+};
+
+/*
+ ************ FILE STATUS SERVICE *****************
+ */
+export const getFileStatusService = async (id: string) => {
+  const file = await fileModel.findById(id);
+
+  if (!file) throw new Error('File not found');
+
+  return {
+    status: file.status,
+    progress: file.progress,
+    compressedUrl: file.compressedUrl,
+  };
 };

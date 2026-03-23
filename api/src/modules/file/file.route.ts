@@ -4,6 +4,7 @@ import {
   downloadFile,
   getFile,
   getFiles,
+  getFileStatusController,
   uploadFile,
 } from './file.controller';
 import { upload } from '../../common/middleware/upload.middleware';
@@ -18,5 +19,6 @@ router.get('/', getFiles);
 router.get('/:id', getFile);
 router.get('/download/:id', downloadFile);
 router.delete('/:id', deleteFile);
+router.get('/status/:id', getFileStatusController);
 
 export default router;

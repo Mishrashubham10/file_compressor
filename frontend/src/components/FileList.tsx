@@ -11,6 +11,8 @@ import { Download, Trash2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
+import { ImageCompare } from './ImageComare';
+import { img } from 'framer-motion/client';
 
 export function FileList() {
   const { data } = useGetFilesQuery(undefined);
@@ -76,13 +78,20 @@ function FileItem({ file, onDelete }: FileItemProps) {
       </div>
 
       {file.fileType.startsWith('image') && (
-        <img
-          src={`${process.env.NEXT_PUBLIC_IMG_URL}/${file.originalUrl}`}
-          className="w-full h-40 object-cover rounded mt-3"
-          width={400}
-          height={400}
-          alt="Image"
-        />
+        <>
+          {status === 'DONE' && file.compressedUrl ? (
+            <ImageCompare
+              before={`${process.env.NEXT_PUBLIC_IMG_URL}/${file.originalUrl}`}
+              after={`${process.env.NEXT_PUBLIC_IMG_URL}/${file.compressedUrl}`}
+            />
+          ) : (
+            <img
+              src={`${process.env.NEXT_PUBLIC_IMG_URL}/${file.originalUrl}`}
+              alt="Original Image"
+              className="w-full h-40 object-cover rounded mt-3"
+            />
+          )}
+        </>
       )}
 
       {/* ================= IMAGE PREVIEW ================= */}

@@ -13,6 +13,9 @@ export function ImageCompare({ before, after }: Props) {
   return (
     <div className="relative w-full h-60 overflow-hidden rounded-xl mt-3">
       {/* ========= AFTER BACKGROUND IMG ========== */}
+      <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
+        After
+      </div>
       <img
         src={after}
         alt="after"
@@ -24,6 +27,9 @@ export function ImageCompare({ before, after }: Props) {
         className="absolute top-0 left-0 h-full overflow-hidden"
         style={{ width: `${position}%` }}
       >
+        <div className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
+          Before
+        </div>
         <img src={before} className="w-full h-full object-cover" alt="before" />
       </div>
 

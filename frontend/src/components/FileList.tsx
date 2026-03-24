@@ -104,28 +104,21 @@ function FileItem({ file, onDelete }: FileItemProps) {
       )}
 
       {/* ================= COMPRESSION STATS ================ */}
-      <div className="flex gap-4 mt-3">
+      <div className="flex gap-3 mt-4">
         {status === 'DONE' && (
           <a
-            href={`http://localhost:5000/api/files/download/${file._id}`}
-            className="text-blue-500 flex items-center gap-1"
+            href={`http://localhost:4000/api/v1/files/download/${file._id}`}
+            className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 flex items-center gap-1"
           >
-            <Download size={16} /> Download
+            Download
           </a>
         )}
 
         <button
-          onClick={async () => {
-            try {
-              onDelete(file._id);
-              toast.success('File deleted');
-            } catch {
-              toast.error('Delete failed');
-            }
-          }}
-          className="text-red-500 flex items-center gap-1"
+          onClick={() => onDelete(file._id)}
+          className="px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600"
         >
-          <Trash2 size={16} /> Delete
+          Delete
         </button>
       </div>
     </motion.div>

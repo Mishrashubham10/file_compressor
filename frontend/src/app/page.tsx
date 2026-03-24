@@ -1,18 +1,23 @@
-import { FileList } from '@/components/FileList';
-import { Upload } from '@/components/Upload';
+import { FileList } from "@/components/FileList";
+import DashboardLayout from "@/components/layouts/DashboardLayouts";
+import { Upload } from "@/components/Upload";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-4xl mx-auto space-y-6">
-        <h1 className="text-3xl font-bold">File Compressor</h1>
-        <p className="text-gray-500">
-          Upload, compress and manage your files efficiently
-        </p>
+    <DashboardLayout>
+      <div className="space-y-6">
+        {/* =========== UPLOAD CARD ============= */}
+        <div className="bg-white p-6 rounded-xl shadow-sm border">
+          <h2 className="font-semibold mb-4">Upload File</h2>
+          <Upload />
+        </div>
 
-        <Upload />
-        <FileList />
+        {/* ============= FILE SECTION ============ */}
+        <div className="bg-white p-6 rounded-xl shadow-sm border">
+          <h2 className="font-semibold mb-4">Your Files</h2>
+          <FileList />
+        </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 }
